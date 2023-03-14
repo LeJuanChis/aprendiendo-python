@@ -1,4 +1,5 @@
-import pygame
+import pygame, sys
+from time import sleep
 import random
 
 class SnakeBody:
@@ -20,7 +21,6 @@ class SnakeBody:
             self.y += 10
         elif self.dif == 3:
             self.y -= 10
-
 
 class food:
     def __init__(self, window):
@@ -49,6 +49,7 @@ def follow_snake():
 
 
 def main():
+    
     global snake, food
 
     window = pygame.display.set_mode((600, 600))
@@ -74,6 +75,16 @@ def main():
         snake[0].move()
         refresh(window)
 
+        x, y = window.get_size()
+        if snake[0].x < 0 or snake[0].y < 0 or snake[0].x > 600 or snake[0].y > 600:
+            pygame.init()
+            game_font = pygame.font.Font(None, 30)
+            message = game_font.render("Has perdido, por favor intenta de nuevo", 0, (200, 60, 60))
+            window.blit(message, (100, 100))
+            pygame.display.update()
+            run = False
+            sleep(3)
+
         follow_snake()
 
         pygame.display.update()
@@ -82,6 +93,6 @@ def main():
         if snake[0].x == food.x and snake[0].y == food.y:
             food.new()
             snake.append(SnakeBody(window))
-
+        
 
 main()
